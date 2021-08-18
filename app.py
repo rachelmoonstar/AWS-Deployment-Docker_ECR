@@ -1,4 +1,3 @@
-#Second task is to build a Flask app using the treemodel
 from flask import Flask,request, url_for, redirect, render_template, jsonify
 import pandas as pd
 import pickle
@@ -18,10 +17,12 @@ def predict():
     int_features=[x for x in request.form.values()]
     final=np.array(int_features)
     col = ['age', 'sex', 'bmi', 'children', 'smoker', 'region']
-    data_unseen = pd.DataFrame([final], columns = col) #This is the new data
-    ###########Enter code here to isolate the 'age' and 'bmi' features from data_unseen and
-    #make a prediction. Output=rounded prediction to 2 decimal places
-    output=None
+    data_unseen = pd.DataFrame([final], columns = col)
+    input_data=data_unseen[['age','bmi']].values
+    print(int_features)
+    print(final)
+    prediction=model.predict(input_data)
+    output=round(prediction[0],2)
     return render_template('home.html',pred='Expected Bill will be {}'.format(output))
 
 @app.route('/predict_api',methods=['POST'])
@@ -31,9 +32,10 @@ def predict_api():
     '''
     data = request.get_json(force=True)
     data_unseen = pd.DataFrame([data])
-    ## Same as above, enter code here make a prediction using columns 0(age) and 2(bmi) only. Output is rounded to 2 decimal places
-    #####Enter Code here
-    output=None
+    cols=[0,2]
+    input_data=data_unseen[data_unseen.columns[cols]]
+    prediction = model.predict(input_data)
+    output = round(prediction[0],2)
     return jsonify(output)
 
 if __name__ == '__main__':
