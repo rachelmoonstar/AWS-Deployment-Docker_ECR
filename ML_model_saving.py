@@ -6,18 +6,18 @@ from sklearn.ensemble import RandomForestRegressor
 
 # Step 1: Read the data
 ######Enter Code here#######################
-data=None
+data=pd.read_csv('insurance.csv')
 ##################################################
 
 # Step 2: Extract (bmi and age) features as X and charges as Y
 #######Enter Code here############
-X=None
-y=None
+X=data[['bmi','age']]
+y=data['charges']
 ####################################
 
 # Step 3: Fit a regression model using (X,y), save the model as treemodel.pkl
 ####Add code here
-model=None
+model=RandomForestRegressor().fit(X, y)
 pickle.dump(model,open('treemodel.pkl','wb'))
 ###########################################
 
